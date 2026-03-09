@@ -1,0 +1,1549 @@
+﻿<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>موقع وفر حاجتك</title>
+  <style>
+    :root {
+      --blue-900: #06377f;
+      --blue-700: #0a57c8;
+      --blue-500: #3793ff;
+      --blue-100: #eaf4ff;
+      --white: #ffffff;
+      --ink: #11203a;
+      --muted: #5a6e91;
+      --danger: #c62828;
+      --ok: #1c7c3a;
+      --shadow: 0 16px 40px rgba(5, 53, 125, 0.22);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 8% 15%, rgba(255,255,255,.4), transparent 42%),
+        radial-gradient(circle at 82% 9%, rgba(255,255,255,.22), transparent 38%),
+        linear-gradient(135deg, var(--blue-900), var(--blue-700) 42%, var(--blue-500) 78%, #beddff);
+      padding: 26px 14px;
+      display: grid;
+      place-items: center;
+    }
+    .layout { width: min(100%, 1080px); }
+    .top-tools {
+      display: flex;
+      justify-content: flex-start;
+      margin-bottom: 10px;
+    }
+    .settings-btn {
+      border: 1px solid rgba(255,255,255,.55);
+      background: rgba(255,255,255,.2);
+      color: #fff;
+      border-radius: 12px;
+      padding: 8px 12px;
+      font-weight: 800;
+      cursor: pointer;
+      backdrop-filter: blur(3px);
+      transition: .2s ease;
+    }
+    .settings-btn:hover {
+      transform: translateY(-1px);
+      background: rgba(255,255,255,.3);
+    }
+    .brand { text-align: center; margin-bottom: 14px; }
+    .brand h1 {
+      margin: 0; color: var(--white); font-size: clamp(1.8rem, 2.2vw + 1rem, 2.9rem);
+      font-weight: 900; letter-spacing: .8px; text-shadow: 0 8px 24px rgba(0,0,0,.16);
+      transition: transform .25s ease, text-shadow .25s ease, filter .25s ease;
+      cursor: default;
+    }
+    .brand h1:hover {
+      transform: translateY(-3px);
+      text-shadow: 0 12px 30px rgba(0,0,0,.2), 0 0 24px rgba(161,211,255,.45);
+      filter: brightness(1.05);
+    }
+    .brand p { margin: 6px 0 0; color: #e5f1ff; font-weight: 600; }
+    .panel {
+      background: rgba(255,255,255,.97); border-radius: 22px; box-shadow: var(--shadow);
+      padding: 22px; border: 1px solid #d7e9ff; transition: transform .25s ease, box-shadow .25s ease;
+    }
+    .panel:hover { transform: translateY(-2px); box-shadow: 0 24px 50px rgba(5,53,125,.22); }
+    .hidden { display: none !important; }
+    .section-title {
+      display: flex; align-items: center; gap: 8px; margin: 0 0 16px;
+      color: var(--blue-900); font-size: 1.25rem; font-weight: 800;
+      transition: transform .2s ease, color .2s ease;
+    }
+    .section-title:hover { transform: translateY(-1px); color: #0b53c4; }
+    .sub-title { margin: 14px 0 8px; color: #0e4da9; font-size: 1rem; font-weight: 800; }
+    .icon {
+      width: 28px; height: 28px; display: grid; place-items: center; border-radius: 10px;
+      background: var(--blue-100); color: var(--blue-700); font-size: 1rem; font-weight: 900;
+    }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .roles { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 10px; margin-bottom: 12px; }
+    .role-btn {
+      border: 2px solid #b7d7ff; background: #f5faff; color: #0e4aa6; border-radius: 12px;
+      padding: 12px 8px; font-size: 1rem; font-weight: 800; cursor: pointer;
+      transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease, background .2s ease;
+    }
+    .role-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 16px rgba(31,117,234,.18); }
+    .role-btn.active {
+      border-color: #1f75ea; background: linear-gradient(130deg, #d7e8ff, #eff6ff);
+      box-shadow: 0 8px 16px rgba(31,117,234,.22);
+    }
+    .field { margin-bottom: 11px; }
+    .field.full { grid-column: 1 / -1; }
+    label { display: block; margin-bottom: 6px; font-weight: 700; color: #123c89; font-size: .95rem; }
+    .label-wrap { display: inline-flex; align-items: center; gap: 7px; }
+    .label-icon {
+      width: 22px; height: 22px; display: inline-grid; place-items: center; border-radius: 7px;
+      background: #eaf3ff; border: 1px solid #c9e1ff; font-size: .88rem;
+    }
+    input, select, textarea {
+      width: 100%; border: 1px solid #aacdf8; border-radius: 12px; background: #fff;
+      font-size: .98rem; padding: 10px 12px; outline: none; color: #11305d;
+      transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
+    }
+    input:hover, select:hover, textarea:hover { border-color: #6ea9f5; transform: translateY(-1px); }
+    textarea { min-height: 92px; resize: vertical; }
+    input:focus, select:focus, textarea:focus {
+      border-color: #2576e3; box-shadow: 0 0 0 3px rgba(37,118,227,.16);
+    }
+    select {
+      -webkit-appearance: none; appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24'%3E%3Cpath fill='%2317509f' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: left 12px center; padding-left: 38px; cursor: pointer;
+    }
+    .hint { margin: 3px 0 0; color: var(--muted); font-size: .84rem; font-weight: 600; }
+    .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
+    .btn {
+      border: 0; border-radius: 12px; padding: 11px 16px; font-weight: 800; cursor: pointer;
+      font-size: .95rem; transition: transform .2s ease, box-shadow .2s ease, filter .2s ease;
+    }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(17,72,151,.18); filter: brightness(1.03); }
+    .btn.primary { background: linear-gradient(120deg, #0b56c9, #2a88ff); color: #fff; min-width: 130px; }
+    .btn.secondary { background: #eaf3ff; color: #124a9f; min-width: 130px; }
+    .btn.small { padding: 8px 12px; border-radius: 10px; font-size: .84rem; }
+    .error { min-height: 22px; color: var(--danger); font-weight: 700; margin: 2px 0 0; font-size: .92rem; }
+    .ok { color: var(--ok); font-weight: 800; margin-top: 7px; font-size: .95rem; }
+    .dash-head { display: flex; justify-content: space-between; gap: 10px; align-items: center; margin-bottom: 12px; flex-wrap: wrap; }
+    .chip {
+      background: #eaf3ff; color: #14438e; border: 1px solid #c6dfff; font-weight: 800;
+      border-radius: 99px; padding: 6px 12px; font-size: .84rem;
+      transition: transform .2s ease, background .2s ease;
+    }
+    .chip:hover { transform: translateY(-1px); background: #dcecff; }
+    .posts { display: grid; gap: 10px; margin-top: 10px; }
+    .post-card {
+      border: 1px solid #d7e8ff; border-radius: 14px; padding: 12px; background: #fbfdff;
+      transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+    }
+    .post-card:hover { transform: translateY(-2px); border-color: #b6d7ff; box-shadow: 0 10px 20px rgba(15,76,164,.14); }
+    .post-card h4 { margin: 0 0 6px; color: #0f478f; font-size: 1rem; }
+    .meta { margin: 0; color: #2f4f80; font-weight: 700; font-size: .9rem; line-height: 1.8; }
+    .post-age { margin: 8px 0 0; color: #4067a1; font-size: .84rem; font-weight: 800; }
+    .post-img { margin-top: 10px; width: 100%; max-height: 230px; object-fit: cover; border-radius: 10px; border: 1px solid #cee3ff; }
+    .card-actions { margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap; }
+    .empty {
+      padding: 15px; border: 1px dashed #b5d4ff; border-radius: 14px; color: #4b6797;
+      font-weight: 700; background: #f6fbff; text-align: center;
+    }
+    .provider-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+    .tab-btn {
+      border: 1px solid #bdd9ff; background: #f6faff; color: #1854ad; border-radius: 10px;
+      font-weight: 800; padding: 9px 12px; cursor: pointer; transition: .2s ease;
+    }
+    .tab-btn:hover { transform: translateY(-1px); }
+    .tab-btn.active {
+      background: #e1eeff; border-color: #2f80ef; box-shadow: 0 8px 14px rgba(47,128,239,.16);
+    }
+    .chat-overlay {
+      position: fixed; inset: 0; background: rgba(4,27,67,.45); display: grid; place-items: center;
+      padding: 14px; z-index: 1000;
+    }
+    .chat-box {
+      width: min(100%, 720px); background: #fff; border-radius: 16px; border: 1px solid #d1e5ff;
+      overflow: hidden; box-shadow: 0 20px 45px rgba(6,44,103,.32);
+    }
+    .chat-head {
+      display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 12px;
+      background: linear-gradient(120deg, #0c58cd, #2d8cff); color: #fff;
+    }
+    .chat-title { margin: 0; font-size: 1rem; font-weight: 900; }
+    .chat-note { margin: 0; font-size: .8rem; font-weight: 700; opacity: .95; }
+    .chat-close {
+      border: 0; background: rgba(255,255,255,.2); color: #fff; width: 34px; height: 34px;
+      border-radius: 9px; cursor: pointer; font-size: 1rem; font-weight: 900;
+    }
+    .chat-messages {
+      max-height: 360px; overflow-y: auto; padding: 12px; background: #f9fcff; display: grid; gap: 8px;
+    }
+    .msg {
+      max-width: 85%; padding: 9px 10px; border-radius: 11px; border: 1px solid #d8e9ff; background: #fff;
+    }
+    .msg.mine { justify-self: end; background: #e8f2ff; border-color: #bdd8ff; }
+    .msg-head { font-size: .75rem; color: #35588d; font-weight: 800; margin-bottom: 4px; }
+    .msg-text { margin: 0; color: #153b73; font-weight: 700; line-height: 1.6; white-space: pre-wrap; word-break: break-word; }
+    .chat-input { border-top: 1px solid #dbeaff; background: #fff; padding: 12px; display: grid; gap: 8px; }
+    .chat-input-row { display: flex; gap: 8px; }
+    .settings-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(4, 27, 67, 0.45);
+      display: grid;
+      place-items: center;
+      padding: 14px;
+      z-index: 1100;
+    }
+    .settings-box {
+      width: min(100%, 460px);
+      background: #fff;
+      border-radius: 16px;
+      border: 1px solid #d1e5ff;
+      box-shadow: 0 20px 45px rgba(6,44,103,.32);
+      padding: 14px;
+    }
+    .settings-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .settings-title {
+      margin: 0;
+      font-size: 1.1rem;
+      color: #0f4a9f;
+      font-weight: 900;
+    }
+    .settings-close {
+      border: 0;
+      width: 34px;
+      height: 34px;
+      border-radius: 9px;
+      cursor: pointer;
+      color: #fff;
+      background: linear-gradient(120deg, #0c58cd, #2d8cff);
+      font-weight: 900;
+    }
+    body.theme-dark {
+      --ink: #e9f1ff;
+      --muted: #a9bddf;
+      --blue-100: #19345d;
+      background:
+        radial-gradient(circle at 8% 15%, rgba(73, 126, 255, 0.15), transparent 42%),
+        radial-gradient(circle at 82% 9%, rgba(111, 166, 255, 0.12), transparent 38%),
+        linear-gradient(135deg, #071a35, #0d2a52 42%, #163f76 78%, #224c80);
+    }
+    body.theme-dark .panel,
+    body.theme-dark .chat-box,
+    body.theme-dark .settings-box {
+      background: rgba(9, 21, 43, 0.95);
+      border-color: #2a4875;
+      color: #e7f0ff;
+    }
+    body.theme-dark .post-card,
+    body.theme-dark .empty,
+    body.theme-dark .msg,
+    body.theme-dark .msg.mine {
+      background: #122946;
+      border-color: #2f537f;
+      color: #dceaff;
+    }
+    body.theme-dark input,
+    body.theme-dark select,
+    body.theme-dark textarea {
+      background: #0f2341;
+      border-color: #355c8a;
+      color: #e8f2ff;
+    }
+    body.theme-dark .meta,
+    body.theme-dark .post-age,
+    body.theme-dark label,
+    body.theme-dark .sub-title,
+    body.theme-dark .section-title,
+    body.theme-dark .settings-title {
+      color: #d7e9ff;
+    }
+    body.theme-dark .chip,
+    body.theme-dark .btn.secondary,
+    body.theme-dark .role-btn,
+    body.theme-dark .tab-btn {
+      background: #163258;
+      border-color: #3e6290;
+      color: #d9ebff;
+    }
+    @media (max-width: 760px) {
+      .grid, .roles { grid-template-columns: 1fr; }
+      body { padding: 14px 10px; }
+      .panel { padding: 14px; border-radius: 16px; }
+      .top-tools { justify-content: center; }
+      .actions .btn, .provider-tabs .tab-btn, .settings-btn { width: 100%; }
+      .chat-box { width: 100%; max-height: 92vh; }
+      .chat-messages { max-height: 42vh; }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <div class="top-tools">
+      <button type="button" class="settings-btn" id="settings-btn">⚙️ الإعدادات</button>
+    </div>
+    <header class="brand">
+      <h1 id="brand-title">موقع وفر حاجتك</h1>
+      <p id="brand-subtitle">منصة تربط الطالب بالموفر داخل نفس المنطقة</p>
+    </header>
+    <section class="panel" id="register-screen">
+      <h2 class="section-title"><span class="icon">1</span><span id="register-title">تسجيل الحساب</span></h2>
+      <div class="roles">
+        <button type="button" class="role-btn active" data-role="student" id="role-student-btn">الطالب</button>
+        <button type="button" class="role-btn" data-role="provider" id="role-provider-btn">الموفر</button>
+      </div>
+      <div class="provider-tabs" style="margin-bottom:12px">
+        <button type="button" class="tab-btn active" id="auth-register-btn">إنشاء حساب</button>
+        <button type="button" class="tab-btn" id="auth-login-btn">تسجيل دخول</button>
+      </div>
+      <div class="grid">
+        <div class="field full auth-register-only">
+          <label for="name"><span class="label-wrap"><span class="label-icon">👤</span><span id="label-name">الاسم الكامل</span></span></label>
+          <input id="name" type="text" placeholder="مثال: محمد أحمد" />
+          <p class="hint" id="name-hint">3 أحرف على الأقل وبدون أرقام.</p>
+        </div>
+        <div class="field auth-register-only">
+          <label for="country"><span class="label-wrap"><span class="label-icon">🌍</span><span id="label-country">الدولة</span></span></label>
+          <select id="country">
+            <option value="">اختر الدولة</option>
+            <option value="Jordan">الأردن</option>
+            <option value="Saudi Arabia">السعودية</option>
+            <option value="Egypt">مصر</option>
+            <option value="Iraq">العراق</option>
+          </select>
+        </div>
+        <div class="field auth-register-only">
+          <label for="governorate"><span class="label-wrap"><span class="label-icon">📍</span><span id="label-governorate">المحافظة</span></span></label>
+          <select id="governorate" disabled>
+            <option value="">اختر المحافظة</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="email"><span class="label-wrap"><span class="label-icon">✉️</span><span id="label-email">البريد الإلكتروني</span></span></label>
+          <input id="email" type="email" placeholder="name@example.com" />
+        </div>
+        <div class="field">
+          <label for="password"><span class="label-wrap"><span class="label-icon">🔒</span><span id="label-password">كلمة السر</span></span></label>
+          <input id="password" type="password" placeholder="7 خانات أو أكثر" />
+        </div>
+      </div>
+      <p class="error" id="register-error"></p>
+      <div class="actions">
+        <button type="button" class="btn primary" id="to-phone-btn">متابعة</button>
+      </div>
+    </section>
+
+    <section class="panel hidden" id="otp-screen">
+      <h2 class="section-title"><span class="icon">2</span><span id="otp-title">تحقق من الحساب</span></h2>
+      <div class="field">
+        <label for="otp-code"><span class="label-wrap"><span class="label-icon">🔐</span><span id="otp-label">رمز التحقق</span></span></label>
+        <input id="otp-code" type="text" inputmode="numeric" maxlength="6" placeholder="000000" />
+        <p class="hint" id="otp-hint">تم إرسال الرمز إلى بريدك الإلكتروني.</p>
+      </div>
+      <p class="ok hidden" id="otp-demo-code"></p>
+      <p class="error" id="otp-error"></p>
+      <div class="actions">
+        <button type="button" class="btn primary" id="verify-otp-btn">تأكيد الرمز</button>
+        <button type="button" class="btn secondary" id="resend-otp-btn">إعادة إرسال</button>
+      </div>
+    </section>
+
+    <section class="panel hidden" id="phone-screen">
+      <h2 class="section-title"><span class="icon">3</span><span id="phone-title">رقم الهاتف (اختياري)</span></h2>
+      <div class="field">
+        <label for="phone"><span class="label-wrap"><span class="label-icon">📱</span><span id="label-phone">رقم الهاتف</span></span></label>
+        <input id="phone" type="tel" placeholder="مثال: 0791234567" />
+      </div>
+      <p class="error" id="phone-error"></p>
+      <div class="actions">
+        <button type="button" class="btn primary hidden" id="save-phone-btn">حفظ</button>
+        <button type="button" class="btn secondary" id="skip-phone-btn">تخطي</button>
+      </div>
+    </section>
+
+    <section class="panel hidden" id="student-screen">
+      <div class="dash-head">
+        <h2 class="section-title" style="margin:0"><span class="icon">🎓</span><span id="student-screen-title">شاشة الطالب</span></h2>
+        <span class="chip" id="student-chip"></span>
+      </div>
+      <div class="grid">
+        <div class="field full">
+          <label for="requestText"><span class="label-wrap"><span class="label-icon">🧾</span><span id="label-request">الطلب</span></span></label>
+          <textarea id="requestText" placeholder="اكتب طلبك بوضوح"></textarea>
+        </div>
+        <div class="field">
+          <label for="quantity"><span class="label-wrap"><span class="label-icon">🔢</span><span id="label-quantity">الكمية</span></span></label>
+          <input id="quantity" type="number" min="1" placeholder="مثال: 3" />
+        </div>
+        <div class="field">
+          <label for="requestLocation"><span class="label-wrap"><span class="label-icon">📌</span><span id="label-request-location">الموقع</span></span></label>
+          <input id="requestLocation" type="text" placeholder="مثال: عمّان - الجبيهة" />
+        </div>
+        <div class="field full">
+          <label for="requestImage"><span class="label-wrap"><span class="label-icon">🖼️</span><span id="label-request-image">إرفاق صورة</span></span></label>
+          <input id="requestImage" type="file" accept="image/*" />
+        </div>
+      </div>
+      <p class="error" id="student-error"></p>
+      <div class="actions">
+        <button type="button" class="btn primary" id="publish-btn">نشر الطلب</button>
+        <button type="button" class="btn secondary hidden" id="cancel-edit-post-btn">إلغاء التعديل</button>
+      </div>
+      <p class="ok hidden" id="publish-ok">تم نشر الطلب بنجاح.</p>
+
+      <h3 class="sub-title" id="my-post-title">طلبي المنشور</h3>
+      <div class="posts" id="student-post-view"></div>
+
+      <h3 class="sub-title" id="area-requests-title">طلبات أخرى في منطقتك</h3>
+      <div class="posts" id="area-requests-list"></div>
+
+      <h3 class="sub-title" id="area-services-title">خدمات متاحة في منطقتك</h3>
+      <div class="posts" id="area-services-list"></div>
+    </section>
+
+    <section class="panel hidden" id="provider-screen">
+      <div class="dash-head">
+        <h2 class="section-title" style="margin:0"><span class="icon">🧰</span><span id="provider-screen-title">شاشة الموفر</span></h2>
+        <span class="chip" id="provider-chip"></span>
+      </div>
+
+      <div class="provider-tabs">
+        <button type="button" class="tab-btn active" data-tab="requests" id="provider-tab-requests">تلبية الطلبات</button>
+        <button type="button" class="tab-btn" data-tab="services" id="provider-tab-services">نشر الخدمات</button>
+      </div>
+
+      <section id="provider-requests-panel">
+        <h3 class="sub-title" id="provider-requests-title">طلبات متوفرة في منطقتك</h3>
+        <div class="posts" id="provider-posts"></div>
+      </section>
+
+      <section id="provider-services-panel" class="hidden">
+        <h3 class="sub-title" id="provider-new-service-title">نشر خدمة جديدة</h3>
+        <div class="grid">
+          <div class="field">
+            <label for="serviceTitle"><span class="label-wrap"><span class="label-icon">🛠️</span><span id="label-service-title">عنوان الخدمة</span></span></label>
+            <input id="serviceTitle" type="text" placeholder="مثال: حداد متوفر" />
+          </div>
+          <div class="field">
+            <label for="serviceLocation"><span class="label-wrap"><span class="label-icon">📍</span><span id="label-service-location">منطقة الخدمة</span></span></label>
+            <input id="serviceLocation" type="text" placeholder="مثال: عمّان - مرج الحمام" />
+          </div>
+          <div class="field full">
+            <label for="serviceDescription"><span class="label-wrap"><span class="label-icon">📝</span><span id="label-service-description">وصف الخدمة</span></span></label>
+            <textarea id="serviceDescription" placeholder="اكتب وصف مختصر للخدمة"></textarea>
+          </div>
+        </div>
+        <p class="error" id="service-error"></p>
+        <div class="actions">
+          <button type="button" class="btn primary" id="publish-service-btn">نشر الخدمة</button>
+          <button type="button" class="btn secondary hidden" id="cancel-edit-service-btn">إلغاء التعديل</button>
+        </div>
+        <p class="ok hidden" id="service-ok">تم نشر الخدمة بنجاح.</p>
+
+        <h3 class="sub-title" id="provider-services-title">خدماتك المنشورة</h3>
+        <div class="posts" id="provider-services"></div>
+      </section>
+    </section>
+  </div>
+
+  <section class="settings-overlay hidden" id="settings-overlay">
+    <div class="settings-box">
+      <div class="settings-head">
+        <h3 class="settings-title" id="settings-title">الإعدادات</h3>
+        <button class="settings-close" type="button" id="settings-close-btn">✕</button>
+      </div>
+      <div class="field">
+        <label for="theme-select" id="theme-label">نمط الألوان</label>
+        <select id="theme-select">
+          <option value="light">فاتح</option>
+          <option value="dark">داكن</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="lang-select" id="lang-label">اللغة</label>
+        <select id="lang-select">
+          <option value="ar">العربية</option>
+          <option value="en">English</option>
+        </select>
+      </div>
+    </div>
+  </section>
+
+  <section class="chat-overlay hidden" id="chat-overlay">
+    <div class="chat-box">
+      <div class="chat-head">
+        <div>
+          <p class="chat-title" id="chat-title">محادثة</p>
+          <p class="chat-note">محادثة موثقة: كل الرسائل محفوظة بالوقت والتاريخ لحفظ الحقوق.</p>
+        </div>
+        <button class="chat-close" type="button" id="close-chat-btn">✕</button>
+      </div>
+      <div class="chat-messages" id="chat-messages"></div>
+      <div class="chat-input">
+        <textarea id="chat-text" placeholder="اكتب رسالتك..."></textarea>
+        <div class="chat-input-row"><button type="button" class="btn primary" id="send-chat-btn">إرسال</button></div>
+        <p class="error" id="chat-error"></p>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const governoratesByCountry = {
+      "Jordan": ["عمّان", "إربد", "الزرقاء", "البلقاء", "مأدبا", "جرش", "عجلون", "الكرك", "الطفيلة", "معان", "العقبة", "المفرق"],
+      "Saudi Arabia": ["الرياض", "مكة المكرمة", "المدينة المنورة", "القصيم", "الشرقية", "عسير", "تبوك", "حائل", "الحدود الشمالية", "جازان", "نجران", "الباحة", "الجوف"],
+      "Egypt": ["القاهرة", "الجيزة", "الإسكندرية", "الدقهلية", "الشرقية", "المنوفية", "الغربية", "البحيرة", "الفيوم", "المنيا", "أسيوط", "سوهاج", "قنا", "الأقصر", "أسوان", "بورسعيد", "الإسماعيلية", "السويس", "دمياط", "كفر الشيخ", "بني سويف"],
+      "Iraq": ["بغداد", "البصرة", "نينوى", "أربيل", "النجف", "كربلاء", "الأنبار", "بابل", "دهوك", "ديالى", "ذي قار", "السليمانية", "صلاح الدين", "كركوك", "واسط", "ميسان", "المثنى", "القادسية"]
+    };
+    const countryNamesAr = {"Jordan":"الأردن","Saudi Arabia":"السعودية","Egypt":"مصر","Iraq":"العراق"};
+
+    const POSTS_KEY = "wafer_hajtak_posts";
+    const SERVICES_KEY = "wafer_hajtak_services";
+    const CHATS_KEY = "wafer_hajtak_chats";
+    const SETTINGS_KEY = "wafer_hajtak_settings";
+
+    const screens = {
+      register: document.getElementById("register-screen"),
+      otp: document.getElementById("otp-screen"),
+      phone: document.getElementById("phone-screen"),
+      student: document.getElementById("student-screen"),
+      provider: document.getElementById("provider-screen")
+    };
+
+    const roleButtons = document.querySelectorAll(".role-btn");
+    const tabButtons = document.querySelectorAll(".tab-btn[data-tab]");
+    const authRegisterBtn = document.getElementById("auth-register-btn");
+    const authLoginBtn = document.getElementById("auth-login-btn");
+    const authRegisterOnlyFields = document.querySelectorAll(".auth-register-only");
+
+    const nameInput = document.getElementById("name");
+    const countrySelect = document.getElementById("country");
+    const governorateSelect = document.getElementById("governorate");
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+    const phoneInput = document.getElementById("phone");
+
+    const registerError = document.getElementById("register-error");
+    const otpError = document.getElementById("otp-error");
+    const otpDemoCode = document.getElementById("otp-demo-code");
+    const phoneError = document.getElementById("phone-error");
+    const studentError = document.getElementById("student-error");
+    const publishOk = document.getElementById("publish-ok");
+    const serviceError = document.getElementById("service-error");
+    const serviceOk = document.getElementById("service-ok");
+    const chatError = document.getElementById("chat-error");
+
+    const toPhoneBtn = document.getElementById("to-phone-btn");
+    const otpCodeInput = document.getElementById("otp-code");
+    const verifyOtpBtn = document.getElementById("verify-otp-btn");
+    const resendOtpBtn = document.getElementById("resend-otp-btn");
+    const savePhoneBtn = document.getElementById("save-phone-btn");
+    const skipPhoneBtn = document.getElementById("skip-phone-btn");
+
+    const studentChip = document.getElementById("student-chip");
+    const providerChip = document.getElementById("provider-chip");
+
+    const requestText = document.getElementById("requestText");
+    const quantityInput = document.getElementById("quantity");
+    const requestLocation = document.getElementById("requestLocation");
+    const requestImage = document.getElementById("requestImage");
+    const publishBtn = document.getElementById("publish-btn");
+    const cancelEditPostBtn = document.getElementById("cancel-edit-post-btn");
+
+    const studentPostView = document.getElementById("student-post-view");
+    const areaRequestsList = document.getElementById("area-requests-list");
+    const areaServicesList = document.getElementById("area-services-list");
+    const providerPosts = document.getElementById("provider-posts");
+    const providerServices = document.getElementById("provider-services");
+
+    const providerRequestsPanel = document.getElementById("provider-requests-panel");
+    const providerServicesPanel = document.getElementById("provider-services-panel");
+
+    const serviceTitle = document.getElementById("serviceTitle");
+    const serviceLocation = document.getElementById("serviceLocation");
+    const serviceDescription = document.getElementById("serviceDescription");
+    const publishServiceBtn = document.getElementById("publish-service-btn");
+    const cancelEditServiceBtn = document.getElementById("cancel-edit-service-btn");
+
+    const chatOverlay = document.getElementById("chat-overlay");
+    const chatTitle = document.getElementById("chat-title");
+    const chatMessages = document.getElementById("chat-messages");
+    const chatText = document.getElementById("chat-text");
+    const closeChatBtn = document.getElementById("close-chat-btn");
+    const sendChatBtn = document.getElementById("send-chat-btn");
+    const settingsBtn = document.getElementById("settings-btn");
+    const settingsOverlay = document.getElementById("settings-overlay");
+    const settingsCloseBtn = document.getElementById("settings-close-btn");
+    const themeSelect = document.getElementById("theme-select");
+    const langSelect = document.getElementById("lang-select");
+
+    let selectedRole = "student";
+    let authMode = "register";
+    let account = null;
+    let activeChatId = "";
+    let editingPostId = "";
+    let editingServiceId = "";
+    let pendingAuth = null;
+    let appSettings = { theme: "light", lang: "ar" };
+
+    function loadList(key) {
+      try {
+        const raw = localStorage.getItem(key);
+        const parsed = raw ? JSON.parse(raw) : [];
+        return Array.isArray(parsed) ? parsed : [];
+      } catch { return []; }
+    }
+    function saveList(key, list) { localStorage.setItem(key, JSON.stringify(list)); }
+    function getPosts() { return loadList(POSTS_KEY); }
+    function savePosts(posts) { saveList(POSTS_KEY, posts); }
+    function getServices() { return loadList(SERVICES_KEY); }
+    function saveServices(services) { saveList(SERVICES_KEY, services); }
+    function getChats() { return loadList(CHATS_KEY); }
+    function saveChats(chats) { saveList(CHATS_KEY, chats); }
+    async function apiRequest(endpoint, options = {}) {
+      const response = await fetch(endpoint, {
+        method: options.method || "GET",
+        headers: { "Content-Type": "application/json", ...(options.headers || {}) },
+        body: options.body ? JSON.stringify(options.body) : undefined
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        const error = new Error(data.error || "Request failed");
+        error.code = data.errorCode || "";
+        error.details = data;
+        throw error;
+      }
+      return data;
+    }
+    function loadSettings() {
+      const raw = localStorage.getItem(SETTINGS_KEY);
+      if (!raw) return;
+      try {
+        const parsed = JSON.parse(raw);
+        if (parsed && (parsed.theme === "light" || parsed.theme === "dark")) appSettings.theme = parsed.theme;
+        if (parsed && (parsed.lang === "ar" || parsed.lang === "en")) appSettings.lang = parsed.lang;
+      } catch {}
+    }
+    function saveSettings() { localStorage.setItem(SETTINGS_KEY, JSON.stringify(appSettings)); }
+
+    const i18n = {
+      ar: {
+        settingsBtn: "⚙️ الإعدادات", settingsTitle: "الإعدادات", themeLabel: "نمط الألوان", langLabel: "اللغة",
+        themeLight: "فاتح", themeDark: "داكن", langAr: "العربية", langEn: "English",
+        brandTitle: "موقع وفر حاجتك", brandSubtitle: "منصة تربط الطالب بالموفر داخل نفس المنطقة",
+        registerTitle: "تسجيل الحساب", roleStudent: "الطالب", roleProvider: "الموفر", continue: "متابعة",
+        authRegister: "إنشاء حساب", authLogin: "تسجيل دخول", continueRegister: "إرسال رمز التحقق", continueLogin: "دخول وإرسال رمز",
+        otpTitle: "تحقق من الحساب", otpLabel: "رمز التحقق", otpHint: "تم إرسال الرمز إلى بريدك الإلكتروني.",
+        verifyOtp: "تأكيد الرمز", resendOtp: "إعادة إرسال",
+        phoneTitle: "رقم الهاتف (اختياري)", save: "حفظ", skip: "تخطي",
+        studentScreen: "شاشة الطالب", publishRequest: "نشر الطلب", publishRequestOk: "تم نشر الطلب بنجاح.",
+        myPost: "طلبي المنشور", areaRequests: "طلبات أخرى في منطقتك", areaServices: "خدمات متاحة في منطقتك",
+        providerScreen: "شاشة الموفر", tabRequests: "تلبية الطلبات", tabServices: "نشر الخدمات",
+        providerRequests: "كل طلبات الطلاب المتوفرة", newService: "نشر خدمة جديدة", publishService: "نشر الخدمة",
+        publishServiceOk: "تم نشر الخدمة بنجاح.", myServices: "خدماتك المنشورة",
+        labelName: "الاسم الكامل", nameHint: "3 أحرف على الأقل وبدون أرقام.", labelCountry: "الدولة", labelGovernorate: "المحافظة",
+        labelEmail: "البريد الإلكتروني", labelPassword: "كلمة السر", labelPhone: "رقم الهاتف",
+        labelRequest: "الطلب", labelQuantity: "الكمية", labelRequestLocation: "الموقع", labelRequestImage: "إرفاق صورة",
+        labelServiceTitle: "عنوان الخدمة", labelServiceLocation: "منطقة الخدمة", labelServiceDescription: "وصف الخدمة",
+        phName: "مثال: محمد أحمد", phEmail: "name@example.com", phPassword: "7 خانات أو أكثر", phPhone: "مثال: 0791234567",
+        phRequest: "اكتب طلبك بوضوح", phQuantity: "مثال: 3", phRequestLocation: "مثال: عمّان - الجبيهة",
+        phServiceTitle: "مثال: حداد متوفر", phServiceLocation: "مثال: عمّان - مرج الحمام", phServiceDescription: "اكتب وصف مختصر للخدمة",
+        phChat: "اكتب رسالتك...", countryPlaceholder: "اختر الدولة", governoratePlaceholder: "اختر المحافظة",
+        validationName: "الاسم يجب أن يكون 3 أحرف على الأقل وبدون أرقام.", validationCountry: "اختر دولة صحيحة من القائمة.",
+        validationGovernorate: "اختر محافظة صحيحة تابعة للدولة المختارة.", validationEmail: "البريد الإلكتروني غير صحيح.",
+        validationPassword: "كلمة السر يجب أن تكون 7 خانات على الأقل.", validationPhone: "رقم الهاتف غير صحيح. استخدم أرقام فقط (7 إلى 15 خانة).",
+        validationReqRequired: "حقل الطلب مطلوب.", validationQtyRequired: "الكمية يجب أن تكون رقم 1 أو أكثر.",
+        validationLocationRequired: "حقل الموقع مطلوب.", validationImageRequired: "يرجى إرفاق صورة للطلب.",
+        validationServiceTitle: "عنوان الخدمة مطلوب.", validationServiceLocation: "موقع الخدمة مطلوب.", validationServiceDesc: "وصف الخدمة مطلوب.",
+        moderationBlocked: "المحتوى مرفوض لأنه قد يكون مخلًا أو غير قانوني. يرجى تعديل النص.",
+        validationEmailExists: "هذا البريد مسجل مسبقاً. استخدم تسجيل الدخول.", validationLoginInvalid: "البريد أو كلمة السر غير صحيحة.",
+        validationRoleMismatch: "هذا الحساب مسجل كفئة مختلفة. غيّر الفئة أو استخدم الحساب الصحيح.",
+        validationOtpRequired: "أدخل رمز التحقق المكوّن من 6 أرقام.", validationOtpInvalid: "رمز التحقق غير صحيح.",
+        validationOtpExpired: "انتهت صلاحية الرمز. أعد الإرسال.", validationOtpLocked: "انتهت محاولاتك الثلاث. أعد إرسال رمز جديد.",
+        validationServerError: "حدث خطأ بالخادم. تحقق من الاتصال وإعدادات البريد.",
+        deletePost: "حذف المنشور", deleteService: "حذف الخدمة", noOwnPost: "لا يوجد منشور لك حالياً.",
+        editPost: "تعديل المنشور", editService: "تعديل الخدمة", updateRequest: "حفظ تعديل الطلب",
+        updateService: "حفظ تعديل الخدمة", cancelEdit: "إلغاء التعديل",
+        chatNote: "محادثة موثقة: كل الرسائل محفوظة بالوقت والتاريخ لحفظ الحقوق.", chatSend: "إرسال",
+        cardRequest: "طلب", cardService: "خدمة", cardStudent: "الطالب", cardProvider: "الموفر",
+        cardCountryGov: "الدولة/المحافظة", cardQty: "الكمية", cardLocation: "الموقع", cardRequestLabel: "الطلب",
+        cardServiceTitle: "عنوان الخدمة", cardDesc: "الوصف", agePrefix: "وقت النشر: ", timeSince: "منذ ",
+        sec: "ثانية", min: "دقيقة", hour: "ساعة", day: "يوم",
+        actionProvide: "توفير هذا الطلب", actionPickService: "اختيار الخدمة وبدء شات",
+        emptyProviderRequests: "لا يوجد طلبات طلاب متوفرة حالياً.",
+        emptyProviderServices: "لم تقم بنشر خدمات بعد.",
+        emptyAreaRequests: "لا يوجد طلبات أخرى في منطقتك حالياً.",
+        emptyAreaServices: "لا يوجد خدمات منشورة في منطقتك حالياً.",
+        chatNoData: "لا توجد بيانات للمحادثة.",
+        chatStart: "ابدأ المحادثة الآن للتفاهم على المبلغ والتفاصيل.",
+        chatRequestTitle: "التفاهم على طلب: ", chatServiceTitle: "التفاهم على خدمة: ",
+        chatWriteFirst: "اكتب رسالة أولاً.", chatNotFound: "تعذر العثور على المحادثة."
+      },
+      en: {
+        settingsBtn: "⚙️ Settings", settingsTitle: "Settings", themeLabel: "Theme", langLabel: "Language",
+        themeLight: "Light", themeDark: "Dark", langAr: "Arabic", langEn: "English",
+        brandTitle: "Waffer Hajatak", brandSubtitle: "A platform connecting students and providers in the same area",
+        registerTitle: "Account Registration", roleStudent: "Student", roleProvider: "Provider", continue: "Continue",
+        authRegister: "Create Account", authLogin: "Login", continueRegister: "Send Verification Code", continueLogin: "Login & Send Code",
+        otpTitle: "Account Verification", otpLabel: "Verification Code", otpHint: "A verification code was sent to your email.",
+        verifyOtp: "Verify Code", resendOtp: "Resend",
+        phoneTitle: "Phone Number (Optional)", save: "Save", skip: "Skip",
+        studentScreen: "Student Screen", publishRequest: "Publish Request", publishRequestOk: "Request published successfully.",
+        myPost: "My Published Request", areaRequests: "Other Requests In Your Area", areaServices: "Available Services In Your Area",
+        providerScreen: "Provider Screen", tabRequests: "Fulfill Requests", tabServices: "Publish Services",
+        providerRequests: "All Student Requests", newService: "Publish New Service", publishService: "Publish Service",
+        publishServiceOk: "Service published successfully.", myServices: "Your Published Services",
+        labelName: "Full Name", nameHint: "At least 3 letters and no numbers.", labelCountry: "Country", labelGovernorate: "Governorate",
+        labelEmail: "Email", labelPassword: "Password", labelPhone: "Phone Number",
+        labelRequest: "Request", labelQuantity: "Quantity", labelRequestLocation: "Location", labelRequestImage: "Attach Image",
+        labelServiceTitle: "Service Title", labelServiceLocation: "Service Location", labelServiceDescription: "Service Description",
+        phName: "Example: John Doe", phEmail: "name@example.com", phPassword: "At least 7 characters", phPhone: "Example: 0791234567",
+        phRequest: "Write your request clearly", phQuantity: "Example: 3", phRequestLocation: "Example: Amman - Jubaiha",
+        phServiceTitle: "Example: Welder Available", phServiceLocation: "Example: Amman - Marj Al Hamam", phServiceDescription: "Write a short description",
+        phChat: "Write your message...", countryPlaceholder: "Select country", governoratePlaceholder: "Select governorate",
+        validationName: "Name must be at least 3 letters and contain no numbers.", validationCountry: "Please select a valid country from the list.",
+        validationGovernorate: "Please select a valid governorate for the selected country.", validationEmail: "Invalid email address.",
+        validationPassword: "Password must be at least 7 characters.", validationPhone: "Invalid phone number. Use digits only (7 to 15).",
+        validationReqRequired: "Request field is required.", validationQtyRequired: "Quantity must be 1 or more.",
+        validationLocationRequired: "Location field is required.", validationImageRequired: "Please attach an image for the request.",
+        validationServiceTitle: "Service title is required.", validationServiceLocation: "Service location is required.", validationServiceDesc: "Service description is required.",
+        moderationBlocked: "Content rejected: it may be illegal, harmful, or inappropriate. Please edit it.",
+        validationEmailExists: "This email is already registered. Please login.", validationLoginInvalid: "Invalid email or password.",
+        validationRoleMismatch: "This account belongs to another role. Change role or use the correct account.",
+        validationOtpRequired: "Enter the 6-digit verification code.", validationOtpInvalid: "Invalid verification code.",
+        validationOtpExpired: "Code expired. Please resend.", validationOtpLocked: "All 3 attempts are used. Resend a new code.",
+        validationServerError: "Server error. Check connection and email SMTP settings.",
+        deletePost: "Delete Post", deleteService: "Delete Service", noOwnPost: "You have no post yet.",
+        editPost: "Edit Post", editService: "Edit Service", updateRequest: "Save Request Edit",
+        updateService: "Save Service Edit", cancelEdit: "Cancel Edit",
+        chatNote: "Verified chat: all messages are timestamped and saved to protect rights.", chatSend: "Send",
+        cardRequest: "Request", cardService: "Service", cardStudent: "Student", cardProvider: "Provider",
+        cardCountryGov: "Country/Governorate", cardQty: "Quantity", cardLocation: "Location", cardRequestLabel: "Request",
+        cardServiceTitle: "Service Title", cardDesc: "Description", agePrefix: "Posted: ", timeSince: "",
+        sec: "sec", min: "min", hour: "hour", day: "day",
+        actionProvide: "Provide This Request", actionPickService: "Select Service & Open Chat",
+        emptyProviderRequests: "No student requests are currently available.",
+        emptyProviderServices: "You have not published any services yet.",
+        emptyAreaRequests: "No other requests in your area right now.",
+        emptyAreaServices: "No published services in your area right now.",
+        chatNoData: "No chat data found.",
+        chatStart: "Start the chat now to agree on price and details.",
+        chatRequestTitle: "Discuss Request: ", chatServiceTitle: "Discuss Service: ",
+        chatWriteFirst: "Type a message first.", chatNotFound: "Chat not found."
+      }
+    };
+    function tr(key) { return (i18n[appSettings.lang] && i18n[appSettings.lang][key]) || key; }
+    function applyTheme() { document.body.classList.toggle("theme-dark", appSettings.theme === "dark"); }
+    function setAuthMode(mode) {
+      authMode = mode;
+      authRegisterBtn.classList.toggle("active", mode === "register");
+      authLoginBtn.classList.toggle("active", mode === "login");
+      authRegisterOnlyFields.forEach((item) => item.classList.toggle("hidden", mode !== "register"));
+      registerError.textContent = "";
+      otpError.textContent = "";
+      otpDemoCode.classList.add("hidden");
+      refreshActionButtonsText();
+    }
+    function refreshActionButtonsText() {
+      publishBtn.textContent = editingPostId ? tr("updateRequest") : tr("publishRequest");
+      publishServiceBtn.textContent = editingServiceId ? tr("updateService") : tr("publishService");
+      cancelEditPostBtn.textContent = tr("cancelEdit");
+      cancelEditServiceBtn.textContent = tr("cancelEdit");
+      toPhoneBtn.textContent = authMode === "register" ? tr("continueRegister") : tr("continueLogin");
+    }
+    function applyLanguage() {
+      document.documentElement.lang = appSettings.lang;
+      document.documentElement.dir = appSettings.lang === "ar" ? "rtl" : "ltr";
+      document.getElementById("settings-btn").textContent = tr("settingsBtn");
+      document.getElementById("settings-title").textContent = tr("settingsTitle");
+      document.getElementById("theme-label").textContent = tr("themeLabel");
+      document.getElementById("lang-label").textContent = tr("langLabel");
+      document.querySelector('#theme-select option[value="light"]').textContent = tr("themeLight");
+      document.querySelector('#theme-select option[value="dark"]').textContent = tr("themeDark");
+      document.querySelector('#lang-select option[value="ar"]').textContent = tr("langAr");
+      document.querySelector('#lang-select option[value="en"]').textContent = tr("langEn");
+      document.getElementById("brand-title").textContent = tr("brandTitle");
+      document.getElementById("brand-subtitle").textContent = tr("brandSubtitle");
+      document.getElementById("register-title").textContent = tr("registerTitle");
+      document.getElementById("role-student-btn").textContent = tr("roleStudent");
+      document.getElementById("role-provider-btn").textContent = tr("roleProvider");
+      authRegisterBtn.textContent = tr("authRegister");
+      authLoginBtn.textContent = tr("authLogin");
+      toPhoneBtn.textContent = tr("continue");
+      document.getElementById("otp-title").textContent = tr("otpTitle");
+      document.getElementById("otp-label").textContent = tr("otpLabel");
+      document.getElementById("otp-hint").textContent = tr("otpHint");
+      verifyOtpBtn.textContent = tr("verifyOtp");
+      resendOtpBtn.textContent = tr("resendOtp");
+      otpCodeInput.placeholder = "000000";
+      document.getElementById("phone-title").textContent = tr("phoneTitle");
+      savePhoneBtn.textContent = tr("save");
+      skipPhoneBtn.textContent = tr("skip");
+      document.getElementById("student-screen-title").textContent = tr("studentScreen");
+      publishBtn.textContent = tr("publishRequest");
+      publishOk.textContent = tr("publishRequestOk");
+      document.getElementById("my-post-title").textContent = tr("myPost");
+      document.getElementById("area-requests-title").textContent = tr("areaRequests");
+      document.getElementById("area-services-title").textContent = tr("areaServices");
+      document.getElementById("provider-screen-title").textContent = tr("providerScreen");
+      document.getElementById("provider-tab-requests").textContent = tr("tabRequests");
+      document.getElementById("provider-tab-services").textContent = tr("tabServices");
+      document.getElementById("provider-requests-title").textContent = tr("providerRequests");
+      document.getElementById("provider-new-service-title").textContent = tr("newService");
+      publishServiceBtn.textContent = tr("publishService");
+      serviceOk.textContent = tr("publishServiceOk");
+      document.getElementById("provider-services-title").textContent = tr("myServices");
+      document.getElementById("label-name").textContent = tr("labelName");
+      document.getElementById("name-hint").textContent = tr("nameHint");
+      document.getElementById("label-country").textContent = tr("labelCountry");
+      document.getElementById("label-governorate").textContent = tr("labelGovernorate");
+      document.getElementById("label-email").textContent = tr("labelEmail");
+      document.getElementById("label-password").textContent = tr("labelPassword");
+      document.getElementById("label-phone").textContent = tr("labelPhone");
+      document.getElementById("label-request").textContent = tr("labelRequest");
+      document.getElementById("label-quantity").textContent = tr("labelQuantity");
+      document.getElementById("label-request-location").textContent = tr("labelRequestLocation");
+      document.getElementById("label-request-image").textContent = tr("labelRequestImage");
+      document.getElementById("label-service-title").textContent = tr("labelServiceTitle");
+      document.getElementById("label-service-location").textContent = tr("labelServiceLocation");
+      document.getElementById("label-service-description").textContent = tr("labelServiceDescription");
+      nameInput.placeholder = tr("phName");
+      emailInput.placeholder = tr("phEmail");
+      passwordInput.placeholder = tr("phPassword");
+      phoneInput.placeholder = tr("phPhone");
+      requestText.placeholder = tr("phRequest");
+      quantityInput.placeholder = tr("phQuantity");
+      requestLocation.placeholder = tr("phRequestLocation");
+      serviceTitle.placeholder = tr("phServiceTitle");
+      serviceLocation.placeholder = tr("phServiceLocation");
+      serviceDescription.placeholder = tr("phServiceDescription");
+      chatText.placeholder = tr("phChat");
+      const countryPlaceholderOption = countrySelect.querySelector('option[value=""]');
+      if (countryPlaceholderOption) countryPlaceholderOption.textContent = tr("countryPlaceholder");
+      const countryMap = {
+        "Jordan": { ar: "الأردن", en: "Jordan" },
+        "Saudi Arabia": { ar: "السعودية", en: "Saudi Arabia" },
+        "Egypt": { ar: "مصر", en: "Egypt" },
+        "Iraq": { ar: "العراق", en: "Iraq" }
+      };
+      Object.keys(countryMap).forEach((key) => {
+        const option = countrySelect.querySelector('option[value="' + key + '"]');
+        if (option) option.textContent = countryMap[key][appSettings.lang];
+      });
+      updateGovernorates();
+      document.querySelector(".chat-note").textContent = tr("chatNote");
+      sendChatBtn.textContent = tr("chatSend");
+      refreshActionButtonsText();
+      updateElapsedTimes();
+    }
+
+    function setScreen(name) {
+      Object.values(screens).forEach((screen) => screen.classList.add("hidden"));
+      screens[name].classList.remove("hidden");
+    }
+
+    function updateGovernorates() {
+      const country = countrySelect.value;
+      const govs = governoratesByCountry[country] || [];
+      const previousGovernorate = governorateSelect.value;
+      governorateSelect.innerHTML = '<option value="">' + tr("governoratePlaceholder") + '</option>';
+      govs.forEach((gov) => {
+        const opt = document.createElement("option");
+        opt.value = gov;
+        opt.textContent = gov;
+        governorateSelect.appendChild(opt);
+      });
+      if (govs.includes(previousGovernorate)) governorateSelect.value = previousGovernorate;
+      governorateSelect.disabled = govs.length === 0;
+    }
+
+    function isValidName(value) { return value.length >= 3 && !/\d/.test(value); }
+    function isValidEmail(value) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value); }
+    function containsProhibitedContent(text) {
+      const value = String(text || "").toLowerCase();
+      const badWords = [
+        "مخدر", "حشيش", "هيروين", "كوكايين", "سلاح", "مسدس", "بندقية", "رشاش",
+        "weapon", "gun", "rifle", "drugs", "cocaine", "heroin",
+        "اباح", "اباحية", "جنس", "sex", "porn", "explosive", "متفجر"
+      ];
+      return badWords.some((word) => value.includes(word));
+    }
+
+    function togglePhoneButtons() {
+      const hasPhone = phoneInput.value.trim().length > 0;
+      savePhoneBtn.classList.toggle("hidden", !hasPhone);
+      skipPhoneBtn.classList.toggle("hidden", hasPhone);
+    }
+
+    function formatElapsed(createdAt) {
+      const diffSec = Math.max(1, Math.floor((Date.now() - createdAt) / 1000));
+      if (diffSec < 60) return tr("timeSince") + diffSec + " " + tr("sec");
+      const diffMin = Math.floor(diffSec / 60);
+      if (diffMin < 60) return tr("timeSince") + diffMin + " " + tr("min");
+      const diffHr = Math.floor(diffMin / 60);
+      if (diffHr < 24) return tr("timeSince") + diffHr + " " + tr("hour");
+      const diffDay = Math.floor(diffHr / 24);
+      return tr("timeSince") + diffDay + " " + tr("day");
+    }
+    function formatDateTime(ts) { return new Date(ts).toLocaleString(appSettings.lang); }
+
+    function updateElapsedTimes() {
+      document.querySelectorAll("[data-created-at]").forEach((node) => {
+        const value = Number(node.getAttribute("data-created-at"));
+        node.textContent = tr("agePrefix") + formatElapsed(value);
+      });
+    }
+
+    function createCardBase(titleText, metaHtml, createdAt) {
+      const card = document.createElement("article");
+      card.className = "post-card";
+      const title = document.createElement("h4");
+      title.textContent = titleText;
+      const meta = document.createElement("p");
+      meta.className = "meta";
+      meta.innerHTML = metaHtml;
+      const age = document.createElement("p");
+      age.className = "post-age";
+      age.setAttribute("data-created-at", String(createdAt));
+      card.append(title, meta, age);
+      return card;
+    }
+
+    function renderRequestCard(post, options = {}) {
+      const card = createCardBase(
+        tr("cardRequest"),
+        tr("cardStudent") + ": " + post.ownerName + "<br>" +
+        tr("cardCountryGov") + ": " + post.countryAr + " - " + post.governorate + "<br>" +
+        tr("cardQty") + ": " + post.quantity + "<br>" +
+        tr("cardLocation") + ": " + post.location + "<br>" +
+        tr("cardRequestLabel") + ": " + post.request,
+        post.createdAt
+      );
+      if (post.imageDataUrl) {
+        const img = document.createElement("img");
+        img.src = post.imageDataUrl;
+        img.alt = "صورة الطلب";
+        img.className = "post-img";
+        card.appendChild(img);
+      }
+      if (options.showAction || options.allowDelete) {
+        const actions = document.createElement("div");
+        actions.className = "card-actions";
+        if (options.showAction) {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "btn secondary small";
+          btn.textContent = options.actionText || "بدء محادثة";
+          btn.addEventListener("click", () => options.onAction(post));
+          actions.appendChild(btn);
+        }
+        if (options.allowDelete) {
+          const del = document.createElement("button");
+          del.type = "button";
+          del.className = "btn secondary small";
+          del.textContent = tr("deletePost");
+          del.addEventListener("click", () => options.onDelete(post));
+          actions.appendChild(del);
+        }
+        if (options.allowEdit) {
+          const edit = document.createElement("button");
+          edit.type = "button";
+          edit.className = "btn secondary small";
+          edit.textContent = tr("editPost");
+          edit.addEventListener("click", () => options.onEdit(post));
+          actions.appendChild(edit);
+        }
+        card.appendChild(actions);
+      }
+      return card;
+    }
+
+    function renderServiceCard(service, options = {}) {
+      const card = createCardBase(
+        tr("cardService"),
+        tr("cardProvider") + ": " + service.providerName + "<br>" +
+        tr("cardCountryGov") + ": " + service.countryAr + " - " + service.governorate + "<br>" +
+        tr("cardServiceTitle") + ": " + service.title + "<br>" +
+        tr("cardLocation") + ": " + service.location + "<br>" +
+        tr("cardDesc") + ": " + service.description,
+        service.createdAt
+      );
+      if (options.showAction || options.allowDelete) {
+        const actions = document.createElement("div");
+        actions.className = "card-actions";
+        if (options.showAction) {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "btn secondary small";
+          btn.textContent = options.actionText || "اختيار الخدمة";
+          btn.addEventListener("click", () => options.onAction(service));
+          actions.appendChild(btn);
+        }
+        if (options.allowDelete) {
+          const del = document.createElement("button");
+          del.type = "button";
+          del.className = "btn secondary small";
+          del.textContent = tr("deleteService");
+          del.addEventListener("click", () => options.onDelete(service));
+          actions.appendChild(del);
+        }
+        if (options.allowEdit) {
+          const edit = document.createElement("button");
+          edit.type = "button";
+          edit.className = "btn secondary small";
+          edit.textContent = tr("editService");
+          edit.addEventListener("click", () => options.onEdit(service));
+          actions.appendChild(edit);
+        }
+        card.appendChild(actions);
+      }
+      return card;
+    }
+
+    function renderEmpty(container, text) {
+      container.innerHTML = "";
+      const empty = document.createElement("div");
+      empty.className = "empty";
+      empty.textContent = text;
+      container.appendChild(empty);
+    }
+    function renderProviderRequests() {
+      const posts = getPosts();
+      if (!posts.length) return renderEmpty(providerPosts, tr("emptyProviderRequests"));
+      providerPosts.innerHTML = "";
+      posts.slice().reverse().forEach((post) => {
+        providerPosts.appendChild(renderRequestCard(post, {
+          showAction: true,
+          actionText: tr("actionProvide"),
+          onAction: (selectedPost) => openChatWithRequest(selectedPost)
+        }));
+      });
+      updateElapsedTimes();
+    }
+
+    function renderProviderServices() {
+      const services = getServices().filter((service) => service.providerId === account.id);
+      if (!services.length) return renderEmpty(providerServices, tr("emptyProviderServices"));
+      providerServices.innerHTML = "";
+      services.slice().reverse().forEach((service) => {
+        providerServices.appendChild(renderServiceCard(service, {
+          showAction: false,
+          allowDelete: true,
+          onDelete: (selectedService) => deleteServiceById(selectedService.id),
+          allowEdit: true,
+          onEdit: (selectedService) => startEditService(selectedService)
+        }));
+      });
+      updateElapsedTimes();
+    }
+
+    function renderStudentAreaRequests() {
+      const posts = getPosts().filter((post) =>
+        post.country === account.country &&
+        post.governorate === account.governorate &&
+        post.ownerId !== account.id
+      );
+      if (!posts.length) return renderEmpty(areaRequestsList, tr("emptyAreaRequests"));
+      areaRequestsList.innerHTML = "";
+      posts.slice().reverse().forEach((post) => areaRequestsList.appendChild(renderRequestCard(post)));
+      updateElapsedTimes();
+    }
+
+    function renderStudentAreaServices() {
+      const services = getServices().filter((service) => service.country === account.country && service.governorate === account.governorate);
+      if (!services.length) return renderEmpty(areaServicesList, tr("emptyAreaServices"));
+      areaServicesList.innerHTML = "";
+      services.slice().reverse().forEach((service) => {
+        areaServicesList.appendChild(renderServiceCard(service, {
+          showAction: true,
+          actionText: tr("actionPickService"),
+          onAction: (selectedService) => openChatWithService(selectedService)
+        }));
+      });
+      updateElapsedTimes();
+    }
+
+    function renderStudentOwnPost(post) {
+      if (!post) return renderEmpty(studentPostView, tr("noOwnPost"));
+      studentPostView.innerHTML = "";
+      studentPostView.appendChild(renderRequestCard(post, {
+        allowDelete: true,
+        onDelete: (selectedPost) => deletePostById(selectedPost.id),
+        allowEdit: true,
+        onEdit: (selectedPost) => startEditPost(selectedPost)
+      }));
+      updateElapsedTimes();
+    }
+
+    function startEditPost(post) {
+      editingPostId = post.id;
+      requestText.value = post.request || "";
+      quantityInput.value = String(post.quantity || "");
+      requestLocation.value = post.location || "";
+      cancelEditPostBtn.classList.remove("hidden");
+      refreshActionButtonsText();
+      requestText.focus();
+    }
+
+    function cancelEditPost() {
+      editingPostId = "";
+      requestText.value = "";
+      quantityInput.value = "";
+      requestLocation.value = "";
+      requestImage.value = "";
+      cancelEditPostBtn.classList.add("hidden");
+      refreshActionButtonsText();
+    }
+
+    function startEditService(service) {
+      editingServiceId = service.id;
+      serviceTitle.value = service.title || "";
+      serviceLocation.value = service.location || "";
+      serviceDescription.value = service.description || "";
+      cancelEditServiceBtn.classList.remove("hidden");
+      switchProviderTab("services");
+      refreshActionButtonsText();
+      serviceTitle.focus();
+    }
+
+    function cancelEditService() {
+      editingServiceId = "";
+      serviceTitle.value = "";
+      serviceLocation.value = "";
+      serviceDescription.value = "";
+      cancelEditServiceBtn.classList.add("hidden");
+      refreshActionButtonsText();
+    }
+
+    function deletePostById(postId) {
+      const posts = getPosts().filter((item) => item.id !== postId);
+      savePosts(posts);
+      if (editingPostId === postId) cancelEditPost();
+      if (account && account.role === "student") {
+        const ownPosts = posts.filter((p) => p.ownerId === account.id);
+        renderStudentOwnPost(ownPosts.length ? ownPosts[ownPosts.length - 1] : null);
+        renderStudentAreaRequests();
+      }
+      if (account && account.role === "provider") renderProviderRequests();
+    }
+
+    function deleteServiceById(serviceId) {
+      const services = getServices().filter((item) => item.id !== serviceId);
+      saveServices(services);
+      if (editingServiceId === serviceId) cancelEditService();
+      if (account && account.role === "provider") renderProviderServices();
+      if (account && account.role === "student") renderStudentAreaServices();
+    }
+
+    function switchProviderTab(tabName) {
+      tabButtons.forEach((btn) => btn.classList.toggle("active", btn.dataset.tab === tabName));
+      providerRequestsPanel.classList.toggle("hidden", tabName !== "requests");
+      providerServicesPanel.classList.toggle("hidden", tabName !== "services");
+    }
+
+    function makeChatId(itemType, itemId, idA, idB) {
+      const sorted = [idA, idB].sort();
+      return itemType + "_" + itemId + "_" + sorted.join("_");
+    }
+
+    function ensureChat(payload) {
+      const chats = getChats();
+      const index = chats.findIndex((chat) => chat.id === payload.id);
+      if (index === -1) {
+        chats.push(payload);
+        saveChats(chats);
+        return payload;
+      }
+      return chats[index];
+    }
+
+    function openChat(chatId, title) {
+      activeChatId = chatId;
+      chatTitle.textContent = title;
+      chatText.value = "";
+      chatError.textContent = "";
+      chatOverlay.classList.remove("hidden");
+      renderActiveChat();
+    }
+
+    function openChatWithRequest(post) {
+      const chatId = makeChatId("request", post.id, account.id, post.ownerId);
+      const chat = ensureChat({
+        id: chatId,
+        type: "request",
+        itemId: post.id,
+        title: tr("chatRequestTitle") + post.request,
+        participants: [
+          { id: account.id, name: account.name, role: account.role },
+          { id: post.ownerId, name: post.ownerName, role: "student" }
+        ],
+        createdAt: Date.now(),
+        messages: []
+      });
+      openChat(chat.id, chat.title);
+    }
+
+    function openChatWithService(service) {
+      const chatId = makeChatId("service", service.id, account.id, service.providerId);
+      const chat = ensureChat({
+        id: chatId,
+        type: "service",
+        itemId: service.id,
+        title: tr("chatServiceTitle") + service.title,
+        participants: [
+          { id: account.id, name: account.name, role: account.role },
+          { id: service.providerId, name: service.providerName, role: "provider" }
+        ],
+        createdAt: Date.now(),
+        messages: []
+      });
+      openChat(chat.id, chat.title);
+    }
+
+    function renderActiveChat() {
+      const chat = getChats().find((item) => item.id === activeChatId);
+      chatMessages.innerHTML = "";
+      if (!chat) {
+        chatMessages.innerHTML = '<div class="empty">' + tr("chatNoData") + '</div>';
+        return;
+      }
+      if (!chat.messages.length) {
+        chatMessages.innerHTML = '<div class="empty">' + tr("chatStart") + '</div>';
+        return;
+      }
+      chat.messages.forEach((msg) => {
+        const box = document.createElement("article");
+        box.className = "msg" + (msg.senderId === account.id ? " mine" : "");
+        const head = document.createElement("div");
+        head.className = "msg-head";
+        head.textContent = msg.senderName + " • " + formatDateTime(msg.sentAt);
+        const txt = document.createElement("p");
+        txt.className = "msg-text";
+        txt.textContent = msg.text;
+        box.append(head, txt);
+        chatMessages.appendChild(box);
+      });
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function sendMessage() {
+      chatError.textContent = "";
+      const text = chatText.value.trim();
+      if (!text) {
+        chatError.textContent = tr("chatWriteFirst");
+        return;
+      }
+      const chats = getChats();
+      const index = chats.findIndex((item) => item.id === activeChatId);
+      if (index === -1) {
+        chatError.textContent = tr("chatNotFound");
+        return;
+      }
+      chats[index].messages.push({ senderId: account.id, senderName: account.name, text, sentAt: Date.now() });
+      saveChats(chats);
+      chatText.value = "";
+      renderActiveChat();
+    }
+
+    function refreshDashboards() {
+      if (!account) return;
+      if (account.role === "student") {
+        const ownPosts = getPosts().filter((p) => p.ownerId === account.id);
+        renderStudentOwnPost(ownPosts.length ? ownPosts[ownPosts.length - 1] : null);
+        renderStudentAreaRequests();
+        renderStudentAreaServices();
+      } else {
+        renderProviderRequests();
+        renderProviderServices();
+      }
+    }
+
+    function showDashboard() {
+      cancelEditPost();
+      cancelEditService();
+      if (selectedRole === "student") {
+        studentChip.textContent = account.name + " | " + account.countryAr + " - " + account.governorate;
+        setScreen("student");
+        studentPostView.innerHTML = "";
+        refreshDashboards();
+      } else {
+        providerChip.textContent = account.name + " | " + account.countryAr + " - " + account.governorate;
+        setScreen("provider");
+        switchProviderTab("requests");
+        refreshDashboards();
+      }
+    }
+
+    roleButtons.forEach((btn) => btn.addEventListener("click", () => {
+      roleButtons.forEach((item) => item.classList.remove("active"));
+      btn.classList.add("active");
+      selectedRole = btn.dataset.role;
+    }));
+    authRegisterBtn.addEventListener("click", () => setAuthMode("register"));
+    authLoginBtn.addEventListener("click", () => setAuthMode("login"));
+
+    tabButtons.forEach((btn) => btn.addEventListener("click", () => switchProviderTab(btn.dataset.tab)));
+    countrySelect.addEventListener("change", updateGovernorates);
+    phoneInput.addEventListener("input", togglePhoneButtons);
+    settingsBtn.addEventListener("click", () => settingsOverlay.classList.remove("hidden"));
+    settingsCloseBtn.addEventListener("click", () => settingsOverlay.classList.add("hidden"));
+    settingsOverlay.addEventListener("click", (event) => {
+      if (event.target === settingsOverlay) settingsOverlay.classList.add("hidden");
+    });
+    themeSelect.addEventListener("change", () => {
+      appSettings.theme = themeSelect.value;
+      applyTheme();
+      saveSettings();
+    });
+    langSelect.addEventListener("change", () => {
+      appSettings.lang = langSelect.value;
+      applyLanguage();
+      if (account) refreshDashboards();
+      saveSettings();
+    });
+    cancelEditPostBtn.addEventListener("click", cancelEditPost);
+    cancelEditServiceBtn.addEventListener("click", cancelEditService);
+
+    toPhoneBtn.addEventListener("click", async () => {
+      registerError.textContent = "";
+      const name = nameInput.value.trim();
+      const country = countrySelect.value;
+      const governorate = governorateSelect.value;
+      const email = emailInput.value.trim().toLowerCase();
+      const password = passwordInput.value.trim();
+
+      if (!isValidEmail(email)) return (registerError.textContent = tr("validationEmail"));
+      if (password.length < 7) return (registerError.textContent = tr("validationPassword"));
+      if (authMode === "register") {
+        if (!isValidName(name)) return (registerError.textContent = tr("validationName"));
+        if (!country || !governoratesByCountry[country]) return (registerError.textContent = tr("validationCountry"));
+        if (!governorate || !governoratesByCountry[country].includes(governorate)) return (registerError.textContent = tr("validationGovernorate"));
+      }
+
+      try {
+        const payload = {
+          mode: authMode,
+          role: selectedRole,
+          email,
+          password
+        };
+        if (authMode === "register") {
+          payload.name = name;
+          payload.country = country;
+          payload.countryAr = countryNamesAr[country];
+          payload.governorate = governorate;
+        }
+        const data = await apiRequest("/api/auth/start", { method: "POST", body: payload });
+        pendingAuth = { otpSessionId: data.otpSessionId, mode: authMode };
+        otpCodeInput.value = "";
+        otpError.textContent = "";
+        otpDemoCode.classList.add("hidden");
+        setScreen("otp");
+      } catch (error) {
+        if (error.code === "EMAIL_EXISTS") registerError.textContent = tr("validationEmailExists");
+        else if (error.code === "LOGIN_INVALID") registerError.textContent = tr("validationLoginInvalid");
+        else if (error.code === "ROLE_MISMATCH") registerError.textContent = tr("validationRoleMismatch");
+        else registerError.textContent = tr("validationServerError");
+      }
+    });
+
+    verifyOtpBtn.addEventListener("click", async () => {
+      otpError.textContent = "";
+      const code = otpCodeInput.value.trim();
+      if (!/^\d{6}$/.test(code)) return (otpError.textContent = tr("validationOtpRequired"));
+      if (!pendingAuth || !pendingAuth.otpSessionId) return (otpError.textContent = tr("validationOtpExpired"));
+      try {
+        const data = await apiRequest("/api/auth/verify", {
+          method: "POST",
+          body: { otpSessionId: pendingAuth.otpSessionId, code }
+        });
+        account = data.user;
+        selectedRole = data.user.role;
+        pendingAuth = null;
+        if (data.mode === "register") {
+          phoneInput.value = "";
+          phoneError.textContent = "";
+          togglePhoneButtons();
+          setScreen("phone");
+        } else {
+          showDashboard();
+        }
+      } catch (error) {
+        if (error.code === "OTP_REQUIRED") otpError.textContent = tr("validationOtpRequired");
+        else if (error.code === "OTP_INVALID") otpError.textContent = tr("validationOtpInvalid");
+        else if (error.code === "OTP_LOCKED") otpError.textContent = tr("validationOtpLocked");
+        else if (error.code === "OTP_EXPIRED") otpError.textContent = tr("validationOtpExpired");
+        else otpError.textContent = tr("validationServerError");
+      }
+    });
+
+    resendOtpBtn.addEventListener("click", async () => {
+      if (!pendingAuth || !pendingAuth.otpSessionId) return;
+      otpError.textContent = "";
+      try {
+        await apiRequest("/api/auth/resend", {
+          method: "POST",
+          body: { otpSessionId: pendingAuth.otpSessionId }
+        });
+      } catch (error) {
+        otpError.textContent = tr("validationServerError");
+      }
+    });
+
+    savePhoneBtn.addEventListener("click", async () => {
+      phoneError.textContent = "";
+      const phone = phoneInput.value.trim();
+      if (!/^\+?\d{7,15}$/.test(phone)) return (phoneError.textContent = tr("validationPhone"));
+      account.phone = phone;
+      try {
+        await apiRequest("/api/users/phone", {
+          method: "POST",
+          body: { userId: account.id, phone }
+        });
+      } catch (error) {
+        phoneError.textContent = tr("validationServerError");
+        return;
+      }
+      showDashboard();
+    });
+
+    skipPhoneBtn.addEventListener("click", () => {
+      account.phone = "";
+      showDashboard();
+    });
+
+    publishBtn.addEventListener("click", () => {
+      studentError.textContent = "";
+      publishOk.classList.add("hidden");
+      const req = requestText.value.trim();
+      const qty = Number(quantityInput.value);
+      const location = requestLocation.value.trim();
+      const selectedFile = requestImage.files[0];
+
+      if (!req) return (studentError.textContent = tr("validationReqRequired"));
+      if (!qty || qty < 1) return (studentError.textContent = tr("validationQtyRequired"));
+      if (!location) return (studentError.textContent = tr("validationLocationRequired"));
+      if (!selectedFile && !editingPostId) return (studentError.textContent = tr("validationImageRequired"));
+      if (containsProhibitedContent(req + " " + location)) return (studentError.textContent = tr("moderationBlocked"));
+
+      const completePostSave = (imageDataUrl) => {
+        const posts = getPosts();
+        if (editingPostId) {
+          const index = posts.findIndex((p) => p.id === editingPostId && p.ownerId === account.id);
+          if (index !== -1) {
+            posts[index] = {
+              ...posts[index],
+              request: req,
+              quantity: qty,
+              location,
+              imageDataUrl: imageDataUrl || posts[index].imageDataUrl
+            };
+            savePosts(posts);
+            renderStudentOwnPost(posts[index]);
+            renderStudentAreaRequests();
+            cancelEditPost();
+            publishOk.classList.remove("hidden");
+          }
+          return;
+        }
+        const post = {
+          id: "r_" + Date.now() + "_" + Math.floor(Math.random() * 9999),
+          ownerId: account.id,
+          ownerName: account.name,
+          country: account.country,
+          countryAr: account.countryAr,
+          governorate: account.governorate,
+          request: req,
+          quantity: qty,
+          location,
+          imageDataUrl: imageDataUrl || "",
+          createdAt: Date.now()
+        };
+        posts.push(post);
+        savePosts(posts);
+        renderStudentOwnPost(post);
+        renderStudentAreaRequests();
+        publishOk.classList.remove("hidden");
+      };
+
+      if (selectedFile) {
+        const reader = new FileReader();
+        reader.onload = function () { completePostSave(String(reader.result || "")); };
+        reader.readAsDataURL(selectedFile);
+      } else if (editingPostId) {
+        completePostSave("");
+      } else {
+        studentError.textContent = tr("validationImageRequired");
+      }
+    });
+
+    publishServiceBtn.addEventListener("click", () => {
+      serviceError.textContent = "";
+      serviceOk.classList.add("hidden");
+      const title = serviceTitle.value.trim();
+      const location = serviceLocation.value.trim();
+      const description = serviceDescription.value.trim();
+
+      if (!title) return (serviceError.textContent = tr("validationServiceTitle"));
+      if (!location) return (serviceError.textContent = tr("validationServiceLocation"));
+      if (!description) return (serviceError.textContent = tr("validationServiceDesc"));
+      if (containsProhibitedContent(title + " " + location + " " + description)) return (serviceError.textContent = tr("moderationBlocked"));
+
+      const services = getServices();
+      if (editingServiceId) {
+        const index = services.findIndex((s) => s.id === editingServiceId && s.providerId === account.id);
+        if (index !== -1) {
+          services[index] = { ...services[index], title, location, description };
+        }
+      } else {
+        services.push({
+          id: "s_" + Date.now() + "_" + Math.floor(Math.random() * 9999),
+          providerId: account.id,
+          providerName: account.name,
+          country: account.country,
+          countryAr: account.countryAr,
+          governorate: account.governorate,
+          title,
+          location,
+          description,
+          createdAt: Date.now()
+        });
+      }
+      saveServices(services);
+      cancelEditService();
+      renderProviderServices();
+      serviceOk.classList.remove("hidden");
+    });
+
+    closeChatBtn.addEventListener("click", () => {
+      chatOverlay.classList.add("hidden");
+      activeChatId = "";
+    });
+
+    sendChatBtn.addEventListener("click", sendMessage);
+    chatText.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault();
+        sendMessage();
+      }
+    });
+
+    loadSettings();
+    setAuthMode("register");
+    themeSelect.value = appSettings.theme;
+    langSelect.value = appSettings.lang;
+    applyTheme();
+    applyLanguage();
+
+    setInterval(updateElapsedTimes, 30000);
+  </script>
+</body>
+</html>
